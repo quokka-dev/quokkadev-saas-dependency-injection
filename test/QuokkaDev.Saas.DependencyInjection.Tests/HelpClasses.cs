@@ -8,7 +8,6 @@ namespace QuokkaDev.Saas.DependencyInjection.Tests
     {
         public CustomTenant(Guid id, string identifier) : base(id, identifier)
         {
-
         }
     }
 
