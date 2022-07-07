@@ -86,5 +86,29 @@ namespace QuokkaDev.Saas.DependencyInjection
             Services.AddSingleton<ITenantAccessService<T, TKey>>(serviceInstance);
             return this;
         }
+
+        /// <summary>
+        /// Register the tenant accessor implementation
+        /// </summary>
+        /// <typeparam name="TService">Type of tenant accessor</typeparam>
+        /// <param name="lifetime">Lifetime for the service. Default value is scoped</param>
+        /// <returns>The tenant builder for chaining methods</returns>
+        public TenantBuilder<T, TKey> WithAccessor<TAccessor>(ServiceLifetime lifetime = ServiceLifetime.Scoped) where TAccessor : class, ITenantAccessor<T, TKey>
+        {
+            Services.Add(ServiceDescriptor.Describe(typeof(ITenantAccessor<T, TKey>), typeof(TAccessor), lifetime));
+            return this;
+        }
+
+        /// <summary>
+        /// Register the tenant accessor implementation
+        /// </summary>
+        /// <typeparam name="TService">Type of tenant accessor</typeparam>
+        /// <param name="serviceInstance">the accessor instance. The service will be registered as singleton</param>
+        /// <returns>The tenant builder for chaining methods</returns>
+        public TenantBuilder<T, TKey> WithAccessor<TAccessor>(TAccessor serviceInstance) where TAccessor : class, ITenantAccessor<T, TKey>
+        {
+            Services.AddSingleton<ITenantAccessor<T, TKey>>(serviceInstance);
+            return this;
+        }
     }
 }

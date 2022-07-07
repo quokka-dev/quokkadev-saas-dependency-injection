@@ -115,4 +115,40 @@ public class TenantBuilderUnitTest
         service?.ImplementationInstance.Should().NotBeNull();
         service?.ImplementationInstance.Should().BeSameAs(serviceInstance);
     }
+
+    [Fact(DisplayName = "WithAccessor should register correct type")]
+    public void WithAccessor_Should_Register_Correct_Type()
+    {
+        // Arrange
+        IServiceCollection services = new ServiceCollection();
+        TenantBuilder<Tenant<int>, int> tenantBuilder = new(services);
+
+        // Act
+        tenantBuilder.WithAccessor<MockAccessor>(ServiceLifetime.Singleton);
+        var service = services.FirstOrDefault(sd => sd.ServiceType == typeof(ITenantAccessor<Tenant<int>, int>));
+        // Assert
+        service.Should().NotBeNull();
+        service?.ImplementationType.Should().NotBeNull();
+        service?.ImplementationType.Should().Be(typeof(MockAccessor));
+        service?.Lifetime.Should().Be(ServiceLifetime.Singleton);
+        service?.ImplementationInstance.Should().BeNull();
+    }
+
+    [Fact(DisplayName = "WithAccessor should register correct instance")]
+    public void WithAccessor_Should_Register_Correct_Instance()
+    {
+        // Arrange
+        IServiceCollection services = new ServiceCollection();
+        TenantBuilder<Tenant<int>, int> tenantBuilder = new(services);
+        MockAccessor serviceInstance = new();
+
+        // Act
+        tenantBuilder.WithAccessor<MockAccessor>(serviceInstance);
+        var service = services.FirstOrDefault(sd => sd.ServiceType == typeof(ITenantAccessor<Tenant<int>, int>));
+        // Assert
+        service.Should().NotBeNull();
+        service?.Lifetime.Should().Be(ServiceLifetime.Singleton);
+        service?.ImplementationInstance.Should().NotBeNull();
+        service?.ImplementationInstance.Should().BeSameAs(serviceInstance);
+    }
 }

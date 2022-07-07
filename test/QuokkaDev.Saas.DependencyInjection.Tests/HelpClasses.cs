@@ -49,4 +49,9 @@ namespace QuokkaDev.Saas.DependencyInjection.Tests
             return Task.FromResult(GetTenant());
         }
     }
+
+    public class MockAccessor : ITenantAccessor<Tenant<int>, int>
+    {
+        public Tenant<int>? Tenant => new(1, "my-tenant-identifier");
+    }
 }
